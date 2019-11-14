@@ -1,7 +1,8 @@
-package com.buzzvil.buzzscreen.popsample
+package com.buzzvil.buzzscreen.popsample.kotlin
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.buzzvil.buzzscreen.popsample.R
 
 class MainActivity : AppCompatActivity() {
 
