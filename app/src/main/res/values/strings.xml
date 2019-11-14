@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">PopSample</string>
+    <string name="pop_name">YourPopName</string>
 </resources>
