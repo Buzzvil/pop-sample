@@ -1,4 +1,4 @@
-package com.buzzvil.buzzscreen.popsample.java;
+package com.buzzvil.buzzad.benefit.popsample.java;
 
 import android.app.Application;
 import com.buzzvil.buzzad.benefit.BuzzAdBenefit;

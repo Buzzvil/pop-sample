@@ -1,4 +1,4 @@
-package com.buzzvil.buzzscreen.popsample.java;
+package com.buzzvil.buzzad.benefit.popsample.java;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -14,7 +14,7 @@ import com.buzzvil.buzzad.benefit.BuzzAdBenefit;
 import com.buzzvil.buzzad.benefit.core.ad.AdError;
 import com.buzzvil.buzzad.benefit.presentation.pop.PopHandler;
 import com.buzzvil.buzzad.benefit.presentation.pop.PopOverlayPermissionConfig;
-import com.buzzvil.buzzscreen.popsample.R;
+import com.buzzvil.buzzad.benefit.popsample.R;
 import io.mattcarroll.hover.overlay.OverlayPermission;
 
 import static com.buzzvil.lib.buzzsettingsmonitor.SettingsMonitor.KEY_SETTINGS_REQUEST_CODE;
