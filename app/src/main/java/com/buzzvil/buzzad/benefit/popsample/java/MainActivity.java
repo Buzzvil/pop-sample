@@ -4,16 +4,17 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import android.os.Bundle;
 import com.buzzvil.buzzad.benefit.BuzzAdBenefit;
 import com.buzzvil.buzzad.benefit.core.ad.AdError;
-import com.buzzvil.buzzad.benefit.presentation.pop.PopHandler;
-import com.buzzvil.buzzad.benefit.presentation.pop.PopOverlayPermissionConfig;
+import com.buzzvil.buzzad.benefit.pop.BuzzAdPop;
+import com.buzzvil.buzzad.benefit.pop.PopOverlayPermissionConfig;
+import com.buzzvil.buzzad.benefit.pop.message.MessagePreviewOption;
 import com.buzzvil.buzzad.benefit.popsample.R;
 import io.mattcarroll.hover.overlay.OverlayPermission;
 
@@ -26,8 +27,11 @@ public class MainActivity extends AppCompatActivity {
 
     private Button popShowButton;
     private Button popUnregisterButton;
+    private Button popSetMessagePreview;
+    private Button popSetMessagePreviewWithIcon;
+    private Button popRemoveMessagePreview;
 
-    private PopHandler popHandler;
+    private BuzzAdPop buzzAdPop;
     private BroadcastReceiver sessionReadyReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -42,15 +46,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         BuzzAdBenefit.registerSessionReadyBroadcastReceiver(MainActivity.this, sessionReadyReceiver);
 
-        popHandler = new PopHandler(App.UNIT_ID_POP);
+        buzzAdPop = new BuzzAdPop(App.UNIT_ID_POP);
         popShowButton = findViewById(R.id.pop_show_button);
         popShowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (popHandler.hasPermission(MainActivity.this) || Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                if (buzzAdPop.hasPermission(MainActivity.this) || Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                     showPop();
                 } else {
-                    popHandler.requestPermissionWithDialog(MainActivity.this,
+                    buzzAdPop.requestPermissionWithDialog(MainActivity.this,
                             new PopOverlayPermissionConfig.Builder(R.string.pop_name)
                                     .settingsIntent(OverlayPermission.createIntentToRequestOverlayPermission(MainActivity.this))
                                     .requestCode(REQUEST_CODE_SHOW_POP)
@@ -64,29 +68,73 @@ public class MainActivity extends AppCompatActivity {
         popUnregisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                popHandler.unregisterPop(MainActivity.this);
+                buzzAdPop.removePop(MainActivity.this);
+            }
+        });
+
+        popSetMessagePreview = findViewById(R.id.pop_set_message_preview);
+        popSetMessagePreview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buzzAdPop.setMessagePreview(
+                        new MessagePreviewOption(
+                                "말풍선 메세지 프리뷰",
+                                System.currentTimeMillis(),
+                                System.currentTimeMillis() + 48 * 60 * 60 * 1000,
+                                10 * 1000,
+                                1
+                        )
+                );
+                Toast.makeText(MainActivity.this, "Message Preview Set", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        popSetMessagePreviewWithIcon = findViewById(R.id.pop_set_message_preview_with_icon);
+        popSetMessagePreviewWithIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buzzAdPop.setMessagePreview(
+                        new MessagePreviewOption(
+                                "말풍선 메세지 프리뷰",
+                                R.drawable.bz_default_pop_icon,
+                                System.currentTimeMillis(),
+                                System.currentTimeMillis() + 48 * 60 * 60 * 1000,
+                                10 * 1000,
+                                1
+                        )
+                );
+                Toast.makeText(MainActivity.this, "Message Preview with Icon Set", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        popRemoveMessagePreview = findViewById(R.id.pop_remove_message_preview);
+        popRemoveMessagePreview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buzzAdPop.removeMessagePreview();
+                Toast.makeText(MainActivity.this, "Message Preview Removed", Toast.LENGTH_SHORT).show();
             }
         });
 
         if (getIntent().getBooleanExtra(KEY_SETTINGS_RESULT, false)
                 && getIntent().getIntExtra(KEY_SETTINGS_REQUEST_CODE, 0) == REQUEST_CODE_SHOW_POP) {
-            if (popHandler.hasPermission(this)) {
+            if (buzzAdPop.hasPermission(this)) {
                 showPop();
             }
         }
     }
 
     private void showPop() {
-        popHandler.preload(new PopHandler.PopPreloadListener() {
+        buzzAdPop.preload(new BuzzAdPop.PopPreloadListener() {
             @Override
             public void onPreloaded() {
-                popHandler.showPop(MainActivity.this, true);
+                buzzAdPop.showPop(MainActivity.this, true);
             }
 
             @Override
             public void onError(AdError error) {
                 Toast.makeText(MainActivity.this, "Failed to load Pop Ads: " + error.toString(), Toast.LENGTH_SHORT).show();
-                popHandler.showPop(MainActivity.this, false);
+                buzzAdPop.showPop(MainActivity.this, false);
             }
         });
     }
