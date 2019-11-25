@@ -11,8 +11,8 @@ import com.buzzvil.buzzad.benefit.popsample.R;
 
 public class App extends Application {
 
-    public static final String APP_ID = "YOUR_APP_ID";
-    public static final String UNIT_ID_POP = "YOUR_POP_UNIT_ID";
+    public static final String APP_ID = "260318561407891";
+    public static final String UNIT_ID_POP = "236027834764095";
 
     @Override
     public void onCreate() {
