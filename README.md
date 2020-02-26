@@ -1,1 +1,1 @@
-Moved to https://github.com/Buzzvil/abuzz-sdk-samples => ./buzzad-benefit-pop
+Moved to https://github.com/Buzzvil/buzz-sdk-samples => ./buzzad-benefit-pop
